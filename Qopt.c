@@ -1,4 +1,8 @@
-String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\n";
+String s = "HTTP/1.1 200 OK";
+    s += "Content-Type: text/html";
+    s += "<!DOCTYPE HTML>";
+    s += "<html>";
+
     s +="<head>\n";
     s +="<meta http-equiv=\"Access-Control-Allow-Origin\" name=\"viewport\" content=\"width=device-width, initial-scale=1.0 , user-scalable=no\">\n";
     
