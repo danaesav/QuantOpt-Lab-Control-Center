@@ -44,7 +44,7 @@ String s = "HTTP/1.1 200 OK";
 
     //Body
     s +="<body>\n";
-    s +="<div style=\"color:white; font-size: 125%; text-align: center; \"><b>\n";
+    s +="<div style=\"color:black; font-size: 125%; text-align: center; \"><b>\n";
     
     //Title
     s +="<h1>QuantOpt Lab Control Center</h1>\n";
