@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>QuantOpt Lab</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Courgette|Dancing+Script|Great+Vibes|Lobster+Two|Open+Sans|Pinyon+Script|Satisfy" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+  <style>
+  body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed; 
+    background-color: oldlace ;
+    font-family: 'Playfair Display', serif;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+      background: #008CBA
+;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      background: #5bc0de;
+    }
+
+    .buttons {
+      font-size: 300%; 
+      background-color: oldlace ;
+      color: #008CBA; 
+      border: 3px solid #008CBA; 
+      border-radius: 14px;
+    }
+
+    .textlabels {
+      font-size: 250%;
+      color: #008CBA;
+    }
+    .textlabels2 {
+      font-size: 150%;
+    }
+
+    .buttons:hover {
+      font-size: 300%; 
+      background-color: #008CBA ;
+      color: oldlace; 
+      border: 3px solid oldlace; 
+      border-radius: 14px;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container p-3 my-3" style="text-align: center; color: #008CBA;">
+        <h1><b>QuantOpt Lab</b></h1>
+      <br><br>
+       
+      <div class="row g-3,align-center, justify-content-center">
+
+        <div class="col-auto">
+          <label for="autoSizingSelect" class="textlabels2"><b>Pin No 1</b></label>
+          <select id="PINONE" name="PINONE" class="form-select" id="autoSizingSelect">
+            <option value="01" selected>Pin 1</option>
+            <option value="02">Pin 2</option>
+            <option value="03">Pin 3</option>
+            <option value="04">Pin 4</option>
+            <option value="05">Pin 5</option>
+            <option value="06">Pin 6</option>
+            <option value="07">Pin 7</option>
+            <option value="08">Pin 8</option>
+            <option value="09">Pin 9</option>
+            <option value="10">Pin 10</option>
+            <option value="11">Pin 11</option>
+            <option value="12">Pin 12</option>
+            <option value="13">Pin 13</option>
+            <option value="14"selected>Pin 14</option>
+          </select>
+        </div>
+
+        <div  class="col-auto">
+          <label for="autoSizingSelect" class="textlabels2"><b>Pin No 2</b></label>
+          <select name="PINTWO" id="PINTWO" class="form-select" id="autoSizingSelect">
+            <option value="01" selected>Pin 1</option>
+            <option value="02">Pin 2</option>
+            <option value="03">Pin 3</option>
+            <option value="04">Pin 4</option>
+            <option value="05">Pin 5</option>
+            <option value="06">Pin 6</option>
+            <option value="07">Pin 7</option>
+            <option value="08">Pin 8</option>
+            <option value="09">Pin 9</option>
+            <option value="10">Pin 10</option>
+            <option value="11">Pin 11</option>
+            <option value="12"selected>Pin 12</option>
+            <option value="13">Pin 13</option>
+            <option value="14">Pin 14</option>
+          </select>
+        </div>
+
+        <div  class="col-auto">
+          <label for="autoSizingSelect" class="textlabels2"><b>Pin No 3</b></label>
+          <select name="PINTHREE" id="PINTHREE" class="form-select" id="autoSizingSelect">
+            <option value="01" >Pin 1</option>
+            <option value="02">Pin 2</option>
+            <option value="03">Pin 3</option>
+            <option value="04">Pin 4</option>
+            <option value="05">Pin 5</option>
+            <option value="06">Pin 6</option>
+            <option value="07">Pin 7</option>
+            <option value="08">Pin 8</option>
+            <option value="09">Pin 9</option>
+            <option value="10">Pin 10</option>
+            <option value="11">Pin 11</option>
+            <option value="12">Pin 12</option>
+            <option value="13"selected>Pin 13</option>
+            <option value="14">Pin 14</option>
+          </select>
+        </div>
+      </div>
+      <br><br>
+        
+          <div class="form-group">
+            <label class="textlabels"><b>Speed</b></label>
+            <input type="range" min="50" id="speed" max="400" value="225" class="form-control-range, custom-range" oninput="changespeed(this.value)" onchange="speedfunc()" name="speed">
+          </div><br>
+          <b><output class="textlabels" id="num">225</output><br><br><br></b>
+
+          <div class="form-group">
+            <label class="textlabels" ><b>Steps</b></label>
+            <input type="range" min="1" id="steps" max="1000" value="500" class="form-control-range, custom-range" oninput="changesteps(this.value)" onchange="stepsfunc()" name="steps">
+          </div><br>
+          <b><output class="textlabels" id="num2">500</output><br><br><br></b>
+
+          
+          <button type="submit" id="Left" name="Left" value="D1" class="save_form, btn, buttons" >
+            <svg xmlns="http://www.w3.org/2000/svg"  width="80" height="80" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+            <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"></path>
+            </svg>
+          </button>
+        
+        
+          <button  style="margin-left: 2em; " type="submit" name="Right" id="Right" value="D2" class="save_form, btn, buttons" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+            <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+            </svg>
+          </button>
+      </div>
+      
+    </div>
+
+<script type="text/javascript">
+
+
+$("button").click(function() {
+    var dir = $(this).val();
+    var pin1 = document.getElementById('PINONE').value;
+    var pin2 = document.getElementById('PINTWO').value;
+    var pin3 = document.getElementById('PINTHREE').value;
+    location.replace('http://192.168.1.185/'+dir+pin1+pin2+pin3+"D");
+
+});
+
+function changespeed(x) {
+  num.value = x;
+}
+
+function changesteps(x) {
+  num2.value = x;
+}
+
+function stepsfunc() {
+  var steps = document.getElementById('steps').value;
+  location.replace('http://192.168.1.185/'+"S"+steps+"S");
+}
+
+function speedfunc() {
+  var speed = document.getElementById('speed').value;
+  location.replace('http://192.168.1.185/'+"A"+speed+"A");
+}
+
+</script>
+</body>
+</html>

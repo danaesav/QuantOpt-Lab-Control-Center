@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Line with markers and shadow</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="/js/lib/dummy.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+    <style id="compiled-css" type="text/css">
+    </style>
+    <script id="insert"></script>
+    <script src="/js/stringify.js?7b8b3e118b302e30f3aea5268abb2e317f01168b" charset="utf-8"></script>
+</head>
+<body>
+    
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+
+<div id="container" style="height: 400px; min-width: 310px;"></div>
+
+    <script type="text/javascript">//<![CDATA[
+
+        
+// Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-c.json', function (data) {
+    Highcharts.setOptions({
+    time: {
+        timezoneOffset: -2 * 60
+    }
+
+});
+    // Create the chart
+    Highcharts.stockChart('container', {
+        credits: { enabled: false },
+        
+        rangeSelector: {
+            selected: 1
+        },
+        subtitle: { text: 'Danae Savvidi' },
+        title: {
+            text: 'QuantOpt Temp'
+        },
+        xAxis: [{ 
+        type: 'datetime',
+            formatter: function() {
+                return Highcharts.dateFormat('%Y-%m-%d', this.value);
+            },
+            title: { text: 'Hours', style: { color: Highcharts.getOptions().colors[1] } },
+            crosshair: true }],
+
+        yAxis: [{ labels: {
+
+        format: '{value}°C', style: { color: Highcharts.getOptions().colors[1] }
+        }, title: { text: 'Temperature', style: { color: Highcharts.getOptions().colors[1] } }
+        }, { title: { text: 'Humidity', style: { color: Highcharts.getOptions().colors[0] } },
+        labels: { format: '{value} %', style: { color: Highcharts.getOptions().colors[0] } },
+        opposite: true }],
+        tooltip: { shared: true },
+        legend: { layout: 'vertical', align: 'left', x: 120, verticalAlign: 'top', y: 100, floating: true, backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'rgba(255,255,255,0.25)' }, 
+        series: [{ 
+          
+        name: 'Humidity', 
+
+        yAxis: 1, data: [5,4,10],
+            marker: {
+                enabled: true,
+                radius: 3
+            },
+            shadow: true,
+            tooltip: {
+                valueDecimals: 2
+            },
+        tooltip: { valueSuffix: ' %' }, 
+        // pointStart: Date.now(), 
+        // pointInterval:180000, 
+      }, 
+    //60*10*1000 3 mins
+    { name: 'Temperature', type: 'spline', marker: {
+                enabled: true,
+                radius: 3
+            },
+            shadow: true,
+            tooltip: {
+                valueDecimals: 2
+            },
+    data: [4.5,7.5,9],
+    tooltip: { valueSuffix: '°C' }, 
+    // pointStart: Date.now(), 
+    // pointInterval: 180000, 
+  }] });
+
+</script>
+
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: ""
+      }], "*")
+    }
+    window.name = "result"
+  </script>
+
+    <script>
+      let allLines = []
+
+      window.addEventListener("message", (message) => {
+        if (message.data.console){
+          let insert = document.querySelector("#insert")
+          allLines.push(message.data.console.payload)
+          insert.innerHTML = allLines.join(";\r")
+
+          let result = eval.call(null, message.data.console.payload)
+          if (result !== undefined){
+            console.log(result)
+          }
+        }
+      })
+    </script>
+
+</body>
+</html>
