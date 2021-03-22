@@ -70,7 +70,7 @@ void setup() {
     Serial.println(WiFi.localIP());
 
   timeClient.begin();
-  timeClient.setTimeOffset(3600*2);
+  timeClient.setTimeOffset(3600*8);
   
   
   
@@ -124,7 +124,6 @@ void loop() {
       server.handleClient();
       delay(500);
     } while (z < 240);
-// delay(30000);
 }
 
 void TempMeasure() {
