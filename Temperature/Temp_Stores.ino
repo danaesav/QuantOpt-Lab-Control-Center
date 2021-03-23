@@ -1,10 +1,26 @@
+/*  HOW TO RUN
+ *  
+ * STEP 1: GO TO LINE 69 AND UNCOMMENT IT
+ * STEP 2: GO TO LINES 73-87 AND UNCOMMENT THEM
+ * STEP 3: UPLOAD ONE TIME TILL A TABLE WITH THE SAME VALUES APPEARS IN SERIAL PORT
+ * STEP 4: GO TO LINES 73-87 AND COMMENT THEM
+ * STEP 5: GO TO LINE 69 AND COMMENT IT
+ * STEP 6: UPLOAD AGAIN AND IT WILL WORK
+ * 
+ * NOTES:
+ * 1. DONT FORGET TO CHANGE IP, SSID AND PASS
+ * 2. IF YOU WISH TO CHANGE THE QUANTITY OF VALUES GO TO LINES 52-54 AND CHANGE 100 TO ANY VALUE YOU LIKE
+ * 3. IF YOU WISH TO CHANGE THE TIME INBETWEEN VALUE READINGS GOOD LUCK :)
+ * 
+ * THANKS FOR USING MY PROGRAM - DANAE
+ */
+
+
 #include <ESP8266WiFi.h>
 #include <FS.h>
 #include <Arduino.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-#include <arduino_homekit_server.h>
-//#include "wifi_info.h"
 #include <ESP8266WebServer.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -17,78 +33,60 @@ DallasTemperature sensors(&oneWire);
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
 
-// Variables
+int IP_1 = 192; int IP_2 = 168; int IP_3 = 0; int IP_4 = 188;
+const char *ssid = "TP_Crete";
+const char *password = "1234567890123";
+IPAddress local_IP(IP_1, IP_2, IP_3, IP_4);
+IPAddress gateway(IP_1, IP_2, IP_3, 1);
+IPAddress subnet(255, 255, 255, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   //optional
+IPAddress secondaryDNS(8, 8, 4, 4); //optional
+
 const char* timeFile = "/timeFile.txt";
 const char* tempFile = "/tempFile.txt";
 unsigned long epochTime;
 
-int IP_1 = 192; int IP_2 = 168; int IP_3 = 0; int IP_4 = 188;
-const char *ssid = "SSID";
-const char *password = "PASS";
-IPAddress local_IP(IP_1, IP_2, IP_3, IP_4);
-  IPAddress gateway(IP_1, IP_2, IP_3, 1);
-  IPAddress subnet(255, 255, 255, 0);
-  IPAddress primaryDNS(8, 8, 8, 8);   //optional
-  IPAddress secondaryDNS(8, 8, 4, 4); //optional
-
-
 String buffer;
 File f;
-int i;
-int log_size = 10;
-float Temp[10];
-float Time[10];
-float meas_time;
-float start_time;
 ESP8266WebServer server(80);
+int i;
+int log_size = 100;
+float Temp[100];
+float Time[100];
+float test;
 float tempSensor1;
 uint8_t sensor1[8] = { 0x28, 0x50, 0x74, 0x8D, 0x3C, 0x19, 0x01, 0x63 };
-// Variables
   
 void setup() {
   delay(1000);
+  WiFi.setSleepMode(WIFI_NONE_SLEEP);
   Serial.begin(115200);
   sensors.begin();
-
-
-  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
-      Serial.println("STA Failed to configure");
-    }
-  
-    // Connect to Wi-Fi network with SSID and password
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(1000);
-      Serial.print(".");
-    }
-    // Print local IP address and start web server
-    Serial.println("");
-    Serial.println("WiFi connected.");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
-
   timeClient.begin();
-  timeClient.setTimeOffset(3600*8);
-  
-  
-  
-  //Initialize File System
-  initialize();
+  timeClient.update();
+  wifi_connect();
+  initialize();  //Initialize File System
+  //formatFileSystem();  //Format File System used just once
 
-  //Format File System
-  //formatFileSystem(); //Used just once
+  //BEFORE SECTION - initiallize current data in temp and time tables
 
-  
-  //BEFORE initiallize current data in temp and time tables
-//  timeClient.update();
-//  epochTime = timeClient.getEpochTime();
-//  sensors.requestTemperatures();
-//  tempSensor1 = sensors.getTempC(sensor1);
-//  CURwriteTemp(tempSensor1);
-//  CURwriteTime(epochTime);
-  //BEFORE
+  /* 
+  sensors.requestTemperatures();
+  tempSensor1 = sensors.getTempC(sensor1);
+  timeClient.update();
+  epochTime = timeClient.getEpochTime();
+  while (epochTime < 161653056) {
+    Serial.println("Waiting.. 1");
+    timeClient.update();
+    epochTime = timeClient.getEpochTime();
+    delay(500);
+  }
+  test=(float)epochTime;
+  CURwriteTemp(tempSensor1);
+  CURwriteTime((float)epochTime);
+   */
+
+  //BEFORE SECTION
 
   server.begin();
   server.on("/", handle_OnConnect);
@@ -98,32 +96,19 @@ void setup() {
 }
 
 void loop() {
-  allfilereadTime(); //Copies time data from flash memory to TempData[1][max], max being the total number of recorded data
+  allfilereadTime(); //Copies time data from flash memory to Time[max], max being the total number of recorded data
   allfilereadTemp(); //Copies temp data from flash memory to Temp[max], max being the total number of recorded data
 
-
-  //Add an if current time = to previous one wait
-  TempMeasure();
-  
-  
-  
-  Serial.println("");
-  Serial.println("Current RAM data");
-  Serial.println("");
-  for (i = 0; i <= log_size-1; i++) {
-    Serial.print("Temp: ");
-    Serial.print(Temp[i]);
-    Serial.print("\t");
-    Serial.print("Time: ");
-    Serial.println(Time[i]);
-  }
-  updateFlashData();
-    int z = 0;
+  int z = 0;
     do {
       z += 1;
       server.handleClient();
       delay(500);
-    } while (z < 240);
+    } while (z < 60);
+
+  TempMeasure(); // Get new values
+  updateFlashData(); // Write table data to flash memory
+  checkifworks(); // Printing stuff
 }
 
 void TempMeasure() {
@@ -134,12 +119,20 @@ void TempMeasure() {
       j += 1;
     } while (j < log_size - 1);
       i += 1;
+    timeClient.update(); //Sync time
+    epochTime = timeClient.getEpochTime(); //Get current time
+    while (epochTime <= test) { // Check that it is not the same as previous one
+      Serial.println("Waiting.. 2");
+      timeClient.update();
+      epochTime = timeClient.getEpochTime();
+      server.handleClient();
+      delay(5000);
+    }
     sensors.requestTemperatures();
     tempSensor1 = sensors.getTempC(sensor1); // Gets the values of the temperature
-    timeClient.update();
-    epochTime = timeClient.getEpochTime();
-    Time[0] = epochTime;  //meas_time;
+    Time[0] = (float)epochTime; //Update tables
     Temp[0] = tempSensor1;
+    test = Time[0];
 }
 
 void updateFlashData() {
@@ -147,72 +140,64 @@ void updateFlashData() {
   filewriteTemp(); //Updates temp data on flash memory
 }
 
-void allfilereadTemp() {
+void allfilereadTemp() { //Reads data from temp file in flash memory
   File f = SPIFFS.open(tempFile, "r");
 
   if (!f) {
     Serial.println("file open failed");
   } else {
-      Serial.println("Reading Data from TEMPFile: ");
+      Serial.println("Reading Data from TEMPFile");
       i=0;
       while (f.available()) {
-//        buffer = f.readStringUntil('\n');
-//        int neww = buffer.toInt();
           char latStream[10];
          f.readBytesUntil('\n', latStream, 10);
          float neww = atof(latStream);
         Temp[i]=neww;
-        //Serial.println(neww);
         i++;
       }
-   Serial.println("Done");
    f.close();
   }
 }
 
-void allfilereadTime() {
+void allfilereadTime() { //Reads data from time file in flash memory
   File f = SPIFFS.open(timeFile, "r");
 
   if (!f) {
     Serial.println("file open failed");
   } else {
-      Serial.println("Reading Data from TIMEFile: ");
+      Serial.println("Reading Data from TIMEFile");
       i=0;
       while (f.available()) {
         buffer = f.readStringUntil('\n');
         int neww = buffer.toInt();
         Time[i]=neww;
-        //Serial.println(neww);
         i++;
       }
-   Serial.println("Done");
    f.close();
   }
 }
 
 
-void filewriteTemp() {
+void filewriteTemp() { //Writes temp data in flash memory
   File f = SPIFFS.open(tempFile, "w");
   if (!f) {
     Serial.println("file open failed");
   } else {
       for (i = 0; i <= log_size-1; i++) {
         f.println(Temp[i]); //Copying the TempData to the file
-        //Serial.println(Temp[i]);
       }
       Serial.println("Writing Data to File");
   f.close(); 
   }
 }
 
-void filewriteTime() {
+void filewriteTime() { //Writes time data in flash memory
   File f = SPIFFS.open(timeFile, "w");
   if (!f) {
     Serial.println("file open failed");
   } else {
       for (i = 0; i <= log_size-1; i++) {
         f.println(Time[i]); //Copying the TempData to the file
-        //Serial.println(Time[i]);
       }
       Serial.println("Writing Data to File");
   f.close(); 
@@ -220,7 +205,7 @@ void filewriteTime() {
 }
 
 
-void CURwriteTemp(float tempval) {
+void CURwriteTemp(float tempval) { //initialize flash memory
   File f = SPIFFS.open(tempFile, "w");
   
   if (!f) {
@@ -234,7 +219,7 @@ void CURwriteTemp(float tempval) {
   }
 }
 
-void CURwriteTime(float epochT) {
+void CURwriteTime(float epochT) { //initialize flash memory
   File f = SPIFFS.open(timeFile, "w");
   
   if (!f) {
@@ -249,7 +234,20 @@ void CURwriteTime(float epochT) {
 }
 
 
-void formatFileSystem() {
+void checkifworks() { //Printing stuff
+  Serial.println("");
+  Serial.println("Current RAM data");
+  Serial.println("");
+  for (i = 0; i <= log_size-1; i++) {
+    Serial.print("Temp: ");
+    Serial.print(Temp[i]);
+    Serial.print("\t");
+    Serial.print("Time: ");
+    Serial.println(Time[i]);
+  }
+}
+
+void formatFileSystem() { //Formatting...
     if(SPIFFS.format()) {
     Serial.println("File System Formated");
   } else {
@@ -257,7 +255,7 @@ void formatFileSystem() {
   }
 }
 
-void initialize() {
+void initialize() { //Initializing...
   if(SPIFFS.begin()) {
     Serial.println("SPIFFS Initialize....ok");
   } else {
@@ -272,7 +270,6 @@ void handle_OnConnect() {
 void handle_NotFound() {
   server.send(404, "text/plain", "Not found");
 }
-
 
 //WEBSITE
   String SendHTML(float tempSensor1) {
@@ -302,5 +299,25 @@ void handle_NotFound() {
     ptr +="tooltip: { valueSuffix: \"°C\" } }] }); </script> </body> </html>";
     return ptr;
   }
-
 //WEBSITE
+
+//WIFI
+void wifi_connect() {
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+      Serial.println("STA Failed to configure");
+    }
+    // Connect to Wi-Fi network with SSID and password
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(1000);
+      Serial.print(".");
+    }
+    // Print local IP address and start web server
+    Serial.println("");
+    Serial.println("WiFi connected.");
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
+}
+//WIFI
