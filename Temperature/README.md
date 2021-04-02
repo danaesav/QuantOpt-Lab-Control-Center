@@ -1,4 +1,4 @@
-# QuantOpt-Lab-Control-Center
+# Temperature
 
 
 ## Table of contents

@@ -1,5 +1,4 @@
-# QuantOpt-Lab-Control-Center
-
+# Switches
 
 ## Table of contents
 * [Website Switch](#Website-Switch)
