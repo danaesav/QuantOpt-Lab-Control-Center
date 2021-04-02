@@ -1,3 +1,18 @@
+/*  HOW TO RUN
+ *  
+ * STEP 1: UNCOMMENT LINE 67 AND LINE 72
+ * STEP 2: RUN AND UPLOAD ONE TIME
+ * STEP 3: COMMENT LINE 69 AND LINE 73
+ * STEP 4: UPLOAD AGAIN AND IT WILL WORK
+ * 
+ * NOTES:
+ * 1. DONT FORGET TO CHANGE IP, SSID AND PASS. PASS FOR HOMEKIT SET UP IS 111-111-111
+ * 2. IF YOU WISH TO CHANGE THE QUANTITY OF VALUES GO TO LINES 55-56 AND CHANGE 300 TO ANY VALUE YOU LIKE
+ * 3. TO CHANGE TIMEZONE GO TO LINE 33 AND EDIT 3600. FOR SHANGHAI TIME IT SHOULD BE 3600*6
+ * 
+ * THANKS FOR USING MY PROGRAM - DANAE
+ */
+
 #include <ESP8266WebServer.h>
 #include "DHTesp.h"
 #include <ESP8266WiFi.h>
@@ -19,9 +34,9 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600, 0);
 
 DHTesp dht;
   
-  int IP_1 = 192; int IP_2 = 168; int IP_3 = 0; int IP_4 = 198;
-  const char* ssid = "TP_Crete";  // Enter SSID here
-  const char* password = "1234567890123";  //Enter Password here
+  int IP_1 = 192; int IP_2 = 168; int IP_3 = x; int IP_4 = x2; //Change IP
+  const char* ssid = "SSID";  // Enter SSID here
+  const char* password = "PASS";  //Enter Password here
   ESP8266WebServer server(80);
   IPAddress local_IP(IP_1, IP_2, IP_3, IP_4);
   IPAddress gateway(IP_1, IP_2, IP_3, 1);
@@ -44,21 +59,17 @@ float tempSensor1;
 float humidSensor1;
 uint8_t sensor1[8] = { 0x28, 0x50, 0x74, 0x8D, 0x3C, 0x19, 0x01, 0x63 };
 
-  void setup() {
-    Serial.begin(115200);
-    timeClient.begin();
-    wifi_connect();
+void setup() {
+  Serial.begin(115200);
+  timeClient.begin();
+  wifi_connect();
   initialize();  //Initialize File System
   //formatFileSystem();  //Format File System used just once
   //homekit_storage_reset(); //EXTREMELY VALUABLE DO NOT DELETE
   my_homekit_setup();
 
   //BEFORE SECTION - initiallize current data in temp and time tables
-
-  
   //resetvalues();
-
-
   //BEFORE SECTION
 
   server.begin();
@@ -340,7 +351,7 @@ void resetvalues() {
     CURwriteTime(test);
 }
 
-    void wifi_connect() {
+void wifi_connect() {
   if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
       Serial.println("STA Failed to configure");
     }
