@@ -14,7 +14,8 @@ DHTesp dht;
   
   const char *ssid = "your-ssid";
 const char *password = "your-password";
-int IP_1 = 192; int IP_2 = 168; int IP_3 = x; int IP_4 = x2;  int log_size = 300;
+int IP_1 = 192; int IP_2 = 168; int IP_3 = x; int IP_4 = x2;  
+int log_size = 300;
   float TempData[3][300];
   float meas_time;
   float start_time;
