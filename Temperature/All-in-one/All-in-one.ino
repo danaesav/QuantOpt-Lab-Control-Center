@@ -12,10 +12,6 @@ DHTesp dht;
   float humidSensor1;
   
   
-  /*Put your SSID & Password*/
-  //const char* ssid = "ICP";  // Enter SSID here
-  //const char* password = "xihu@123";  //Enter Password here
-  //define IP fixed adderess
   const char *ssid = "your-ssid";
 const char *password = "your-password";
 int IP_1 = 192; int IP_2 = 168; int IP_3 = x; int IP_4 = x2;  int log_size = 300;
