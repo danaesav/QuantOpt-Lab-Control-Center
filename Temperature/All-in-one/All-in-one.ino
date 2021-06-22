@@ -9,9 +9,9 @@ DHTesp dht;
   float tempSensor1;
   float humidSensor1;
   
-  int IP_1 = 192; int IP_2 = 168; int IP_3 = x1; int IP_4 = x2;
-  const char* ssid = "ssid";  // Enter SSID here
-  const char* password = "pass";  //Enter Password here
+  int IP_1 = 192; int IP_2 = 168; int IP_3 = 0; int IP_4 = 100;
+  const char* ssid = "Crete";  // Enter SSID here
+  const char* password = "1234567890123";  //Enter Password here
   int log_size = 300;
   float TempData[3][300];
   float meas_time;
@@ -33,7 +33,6 @@ DHTesp dht;
     Serial.begin(115200);
     delay(100);
     
-    //TempData[0][0,log_size-1]=millis()-start_time;
     // Connect to WiFi network
     Serial.println();
   
@@ -57,9 +56,6 @@ DHTesp dht;
     Serial.println("WiFi connected.");
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
-    server.begin();
-    server.on("/", handle_OnConnect);
-    server.onNotFound(handle_NotFound);
     
     dht.setup(5, DHTesp::DHT22);
     humidSensor1 = dht.getHumidity();
@@ -70,6 +66,10 @@ DHTesp dht;
       TempData[1][i] = 0;
       TempData[2][i] = humidSensor1;
     }
+    
+    server.begin();
+    server.on("/", handle_OnConnect);
+    server.onNotFound(handle_NotFound);
     server.begin();
     Serial.println("HTTP server started");
     //homekit_storage_reset(); 
