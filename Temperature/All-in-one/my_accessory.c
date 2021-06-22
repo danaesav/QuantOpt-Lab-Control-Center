@@ -15,7 +15,7 @@ homekit_accessory_t *accessories[] = {
       HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
             HOMEKIT_CHARACTERISTIC(NAME, "Multiple Sensors"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Danae's Arduino HomeKit"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0194726"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0190726"),
             HOMEKIT_CHARACTERISTIC(MODEL, "ESP8266"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.2"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, my_accessory_identify),
