@@ -15,7 +15,10 @@ This project includes:
 * Graph templates with temperature and/or humidity
 * Homekit compatability
 * For ESP8266
-	
+
+![alt text](https://github.com/danaesav/QuantOpt-Lab-Control-Center/blob/master/Screen%20Shot%202021-08-16%20at%2016.28.08.png?raw=true)
+![alt text](https://github.com/danaesav/QuantOpt-Lab-Control-Center/blob/master/Screen%20Shot%202021-08-16%20at%2016.28.56.png?raw=true)
+![alt text](https://github.com/danaesav/QuantOpt-Lab-Control-Center/blob/master/Screen%20Shot%202021-08-16%20at%2016.29.22.png?raw=true)
 ## Motor
 This project creates a website from which you can control a motor through arduino
 
